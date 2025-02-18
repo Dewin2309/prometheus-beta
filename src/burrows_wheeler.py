@@ -13,10 +13,7 @@ def burrows_wheeler_transform(text):
         return '', 0
     
     # Add a terminator character that is not in the text
-    if '$' in text:
-        terminator = '#'
-    else:
-        terminator = '$'
+    terminator = '$'
     text += terminator
     
     # Generate all rotations of the text
@@ -69,4 +66,4 @@ def inverse_burrows_wheeler_transform(transformed_text, original_index):
         result.append(transformed_text[current_index])
         current_index = next_array[current_index]
     
-    return ''.join(result)
+    return ''.join(result).rstrip('$')
