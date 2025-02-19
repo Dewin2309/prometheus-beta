@@ -17,22 +17,56 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    # Enhanced regex to capture multiple scenarios
-    pattern = re.compile(r'[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|[A-Z]?[a-z0-9]+|[A-Z]+|[0-9]+|[.,;:!?]')
-    words = pattern.findall(text)
-    
-    # Post-processing to handle some specific cases
-    processed_words = []
-    i = 0
-    while i < len(words):
-        if i+1 < len(words) and len(words[i]) > 1 and words[i].isupper() and words[i+1][0].isupper():
-            # Break up sequences of capital words
-            for char in words[i]:
-                processed_words.append(char)
-            processed_words.append(words[i+1])
-            i += 2
-        else:
-            processed_words.append(words[i])
-            i += 1
-    
-    return processed_words
+    def custom_split(text):
+        """Custom logic for complex text splitting"""
+        words = []
+        current_word = ""
+        current_capitals = ""
+        
+        for char in text:
+            if char.isupper():
+                # Handle accumulated capital letters
+                if current_capitals and (not current_word or current_word[-1].islower()):
+                    if len(current_capitals) > 1:
+                        words.append(current_capitals)
+                    else:
+                        words.append(current_word) if current_word else None
+                        current_word = char
+                    current_capitals = ""
+                elif current_word and current_word.isupper():
+                    current_capitals += char
+                    continue
+                elif current_word:
+                    # If current word is not all uppercase, flush and reset
+                    words.append(current_word)
+                    current_word = char
+                else:
+                    current_word = char
+            elif char.islower() or char.isdigit():
+                # Flush accumulated capitals before adding to word
+                if current_capitals:
+                    if len(current_capitals) > 1:
+                        words.append(current_capitals)
+                    else:
+                        current_word += current_capitals
+                    current_capitals = ""
+                current_word += char
+            else:
+                # Non-alphanumeric character
+                if current_word:
+                    words.append(current_word)
+                    current_word = ""
+                if current_capitals:
+                    words.append(current_capitals)
+                    current_capitals = ""
+                words.append(char)
+        
+        # Final flush
+        if current_word:
+            words.append(current_word)
+        if current_capitals:
+            words.append(current_capitals)
+        
+        return words
+
+    return custom_split(text)
