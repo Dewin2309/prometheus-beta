@@ -15,34 +15,28 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    def parse_complex_text(text):
+    def custom_split(text):
         result = []
-        current_word = ""
+        current_word = text[0]
         
-        for i, char in enumerate(text):
-            # Intelligent word segmentation logic
-            if char.isupper():
-                # Transition from lowercase to uppercase
-                if current_word and current_word[-1].islower():
+        for char in text[1:]:
+            # Transition from lowercase to uppercase
+            if char.isupper() and current_word and current_word[-1].islower():
+                result.append(current_word)
+                current_word = char
+            
+            # Uppercase sequences handling
+            elif char.isupper() and current_word.isupper():
+                # Accumulate capital letters, but have a limit
+                if len(current_word) < 3:
+                    current_word += char
+                else:
                     result.append(current_word)
                     current_word = char
-                # Multiple uppercase scenarios
-                elif current_word and current_word.isupper():
-                    # For abbreviation-like sequences
-                    current_word += char
-                    if len(current_word) > 2 or (i+1 < len(text) and text[i+1].islower()):
-                        result.append(current_word)
-                        current_word = ""
-                else:
-                    current_word += char
-            elif char.islower() or char.isdigit():
-                current_word += char
+            
+            # Continuous word building
             else:
-                # Punctuation handling
-                if current_word:
-                    result.append(current_word)
-                    current_word = ""
-                result.append(char)
+                current_word += char
         
         # Append final word
         if current_word:
@@ -50,23 +44,24 @@ def split_text_to_words(text):
         
         return result
 
-    def consolidate_results(words):
-        final_result = []
+    def post_process(words):
+        processed = []
         i = 0
         while i < len(words):
-            # Complex uppercase handling
+            # Special uppercase sequence handling
             if words[i].isupper() and len(words[i]) > 1:
-                # Intelligent merging strategy
                 if i+1 < len(words) and words[i+1][0].isupper():
-                    final_result.append(words[i])
+                    # Strategic splitting for abbreviations
+                    if len(words[i]) > 2:
+                        processed.append(words[i][:2])
+                        processed.append(words[i][2:])
+                    else:
+                        processed.append(words[i])
                 else:
-                    final_result.append(words[i])
+                    processed.append(words[i])
             else:
-                final_result.append(words[i])
+                processed.append(words[i])
             i += 1
-        
-        return final_result
+        return processed
 
-    # Multi-stage parsing
-    initial_parse = parse_complex_text(text)
-    return consolidate_results(initial_parse)
+    return post_process(custom_split(text))
