@@ -15,53 +15,50 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    def custom_split(text):
+    def parse_text(text):
         result = []
-        current_word = text[0]
+        current_word = ""
         
-        for char in text[1:]:
-            # Transition from lowercase to uppercase
-            if char.isupper() and current_word and current_word[-1].islower():
-                result.append(current_word)
-                current_word = char
-            
-            # Uppercase sequences handling
-            elif char.isupper() and current_word.isupper():
-                # Accumulate capital letters, but have a limit
-                if len(current_word) < 3:
-                    current_word += char
-                else:
+        for char in text:
+            if char.isupper():
+                # Transition from lowercase to uppercase
+                if current_word and current_word[-1].islower():
                     result.append(current_word)
                     current_word = char
-            
-            # Continuous word building
-            else:
+                # Pure uppercase word (abbreviation handling)
+                elif not current_word or current_word.isupper():
+                    current_word += char
+                else:
+                    current_word += char
+            elif char.islower() or char.isdigit():
                 current_word += char
+            else:
+                # Punctuation handling
+                if current_word:
+                    result.append(current_word)
+                    current_word = ""
+                result.append(char)
         
-        # Append final word
+        # Final word append
         if current_word:
             result.append(current_word)
         
         return result
 
-    def post_process(words):
-        processed = []
-        i = 0
-        while i < len(words):
-            # Special uppercase sequence handling
-            if words[i].isupper() and len(words[i]) > 1:
-                if i+1 < len(words) and words[i+1][0].isupper():
-                    # Strategic splitting for abbreviations
-                    if len(words[i]) > 2:
-                        processed.append(words[i][:2])
-                        processed.append(words[i][2:])
-                    else:
-                        processed.append(words[i])
-                else:
-                    processed.append(words[i])
-            else:
-                processed.append(words[i])
+    # Special processing to consolidate results
+    parsed = parse_text(text)
+    
+    # Consolidation stage
+    consolidated = []
+    i = 0
+    while i < len(parsed):
+        # Handle uppercase sequences
+        if parsed[i].isupper() and len(parsed[i]) > 1 and i+1 < len(parsed) and parsed[i+1][0].isupper():
+            # Merge uppercase sequences
+            consolidated.append(''.join(parsed[i:i+2]))
+            i += 2
+        else:
+            consolidated.append(parsed[i])
             i += 1
-        return processed
-
-    return post_process(custom_split(text))
+    
+    return consolidated
