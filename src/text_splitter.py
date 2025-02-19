@@ -17,13 +17,22 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    # Special regex to handle the splitting rules
-    # Positive lookahead and lookbehind to preserve punctuation and capital letter splits
-    words = re.findall(
-        r'([A-Z]*[a-z0-9]+[.,;:!?]*' +  # Lowercase words with optional punc
-        r'|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)' +  # Sequences of capital letters
-        r'|[.,;:!?]+)', 
-        text
-    )
+    # Enhanced regex to capture multiple scenarios
+    pattern = re.compile(r'[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|[A-Z]?[a-z0-9]+|[A-Z]+|[0-9]+|[.,;:!?]')
+    words = pattern.findall(text)
     
-    return words
+    # Post-processing to handle some specific cases
+    processed_words = []
+    i = 0
+    while i < len(words):
+        if i+1 < len(words) and len(words[i]) > 1 and words[i].isupper() and words[i+1][0].isupper():
+            # Break up sequences of capital words
+            for char in words[i]:
+                processed_words.append(char)
+            processed_words.append(words[i+1])
+            i += 2
+        else:
+            processed_words.append(words[i])
+            i += 1
+    
+    return processed_words
