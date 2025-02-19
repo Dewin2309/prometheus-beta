@@ -1,5 +1,3 @@
-import re
-
 def split_text_to_words(text):
     """
     Split text into words based on specific rules:
@@ -17,56 +15,47 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    def custom_split(text):
-        """Custom logic for complex text splitting"""
-        words = []
-        current_word = ""
-        current_capitals = ""
-        
-        for char in text:
-            if char.isupper():
-                # Handle accumulated capital letters
-                if current_capitals and (not current_word or current_word[-1].islower()):
-                    if len(current_capitals) > 1:
-                        words.append(current_capitals)
-                    else:
-                        words.append(current_word) if current_word else None
-                        current_word = char
-                    current_capitals = ""
-                elif current_word and current_word.isupper():
-                    current_capitals += char
-                    continue
-                elif current_word:
-                    # If current word is not all uppercase, flush and reset
-                    words.append(current_word)
-                    current_word = char
-                else:
-                    current_word = char
-            elif char.islower() or char.isdigit():
-                # Flush accumulated capitals before adding to word
-                if current_capitals:
-                    if len(current_capitals) > 1:
-                        words.append(current_capitals)
-                    else:
-                        current_word += current_capitals
-                    current_capitals = ""
+    words = []
+    current_word = text[0]
+    
+    for char in text[1:]:
+        if char.isupper():
+            # Handle different cases of capital letters
+            if current_word[-1].islower():
+                # Start of a new word after lowercase
+                words.append(current_word)
+                current_word = char
+            elif current_word.isupper():
+                # Continuing an all-caps word or abbreviation
                 current_word += char
             else:
-                # Non-alphanumeric character
-                if current_word:
-                    words.append(current_word)
-                    current_word = ""
-                if current_capitals:
-                    words.append(current_capitals)
-                    current_capitals = ""
-                words.append(char)
-        
-        # Final flush
-        if current_word:
-            words.append(current_word)
-        if current_capitals:
-            words.append(current_capitals)
-        
-        return words
-
-    return custom_split(text)
+                # Mixed case word
+                current_word += char
+        elif char.islower() or char.isdigit():
+            # Extend current word with lowercase or digit
+            current_word += char
+        else:
+            # Non-alphanumeric: punctuation
+            if current_word:
+                words.append(current_word)
+                if not char.isspace():
+                    words.append(char)
+                current_word = ""
+    
+    # Append final word
+    if current_word:
+        words.append(current_word)
+    
+    # Post-processing step for specific requirements
+    processed_words = []
+    i = 0
+    while i < len(words):
+        # Handle abbreviations and sequences of capital letters
+        if i+1 < len(words) and (words[i].isupper() and len(words[i]) > 1):
+            # Split multi-letter abbreviation
+            processed_words.extend(list(words[i]))
+        elif words[i] != '':
+            processed_words.append(words[i])
+        i += 1
+    
+    return processed_words
