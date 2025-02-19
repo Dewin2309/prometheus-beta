@@ -15,42 +15,54 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    def advanced_split(text):
+    def smart_split(text):
         result = []
-        current_word = text[0]
-        i = 1
+        current_word = ""
+        uppercase_sequence = ""
         
-        while i < len(text):
-            char = text[i]
-            
-            # Transition from lowercase to uppercase: split
-            if char.isupper() and current_word and current_word[-1].islower():
-                result.append(current_word)
-                current_word = char
-            
-            # Uppercase sequence handling
-            elif char.isupper() and current_word.isupper():
-                # Continuing uppercase word/abbreviation
-                if len(current_word) < 2:
-                    current_word += char
-                else:
+        for i, char in enumerate(text):
+            if char.isupper():
+                # Special handling for uppercase transitions
+                if current_word and current_word[-1].islower():
+                    # Transition from lowercase to uppercase
                     result.append(current_word)
-                    current_word = char
-            
-            # Numeric transition
-            elif char.isdigit() and not current_word[-1].isdigit():
-                result.append(current_word)
-                current_word = char
-            
-            # Normal character continuation
+                    current_word = ""
+                    uppercase_sequence = char
+                elif uppercase_sequence:
+                    # Continuing uppercase sequence
+                    if len(uppercase_sequence) < 2:
+                        uppercase_sequence += char
+                    else:
+                        result.append(uppercase_sequence)
+                        uppercase_sequence = char
+                else:
+                    current_word += char
+            elif char.islower() or char.isdigit():
+                # Handle transitions and continuous sequences
+                if uppercase_sequence:
+                    if len(uppercase_sequence) == 1:
+                        current_word = uppercase_sequence + char
+                    else:
+                        result.append(uppercase_sequence)
+                        current_word = char
+                    uppercase_sequence = ""
+                else:
+                    current_word += char
             else:
-                current_word += char
-            
-            i += 1
+                # Punctuation handling
+                if current_word:
+                    result.append(current_word)
+                    current_word = ""
+                if uppercase_sequence:
+                    result.append(uppercase_sequence)
+                    uppercase_sequence = ""
+                result.append(char)
         
-        # Append final word
+        # Final flushes
         if current_word:
             result.append(current_word)
+        if uppercase_sequence:
+            result.append(uppercase_sequence)
         
         return result
 
@@ -60,25 +72,18 @@ def split_text_to_words(text):
         while i < len(words):
             # Special uppercase handling
             if words[i].isupper() and len(words[i]) > 1:
-                # Intelligent split for mixed abbreviations
+                # Intelligent split for abbreviations and sequences
                 if i+1 < len(words) and words[i+1][0].isupper():
-                    # For sequences like AIGPT4
                     if len(words[i]) > 2:
                         processed.append(words[i][:2])
                         processed.append(words[i][2:])
                     else:
                         processed.append(words[i])
                 else:
-                    # Split pure uppercase into individual letters
-                    processed.extend(list(words[i]))
+                    processed.append(words[i])
             else:
                 processed.append(words[i])
             i += 1
         return processed
 
-    # Handle punctuation before advanced processing
-    punctuated_split = []
-    for chunk in text.replace(',', ' , ').replace('!', ' ! ').replace('?', ' ? ').replace('.', ' . ').replace(':', ' : ').replace(';', ' ; ').split():
-        punctuated_split.extend(advanced_split(chunk))
-    
-    return post_process(punctuated_split)
+    return post_process(smart_split(text))
