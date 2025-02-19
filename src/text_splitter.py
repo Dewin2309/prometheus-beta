@@ -15,58 +15,50 @@ def split_text_to_words(text):
     if not text:
         return []
 
-    def split_complicated_cases(text):
+    def split_word(text):
         result = []
-        current_word = ""
+        current_word = text[0]
         
-        for i, char in enumerate(text):
+        for char in text[1:]:
             if char.isupper():
-                # Manage transition between lowercase and uppercase
+                # Transition from lowercase to uppercase: split
                 if current_word and current_word[-1].islower():
                     result.append(current_word)
                     current_word = char
-                # Manage consecutive uppercase (abbreviations)
-                elif current_word and current_word.isupper():
+                # Continuation of uppercase word
+                elif current_word.isupper():
                     current_word += char
                 else:
                     current_word += char
-            elif char.islower() or char.isdigit():
-                current_word += char
             else:
-                # Punctuation handling
-                if current_word:
-                    result.append(current_word)
-                    current_word = ""
-                if not char.isspace():
-                    result.append(char)
+                current_word += char
         
-        # Append final word
         if current_word:
             result.append(current_word)
         
         return result
 
     def post_process(words):
-        processed_words = []
+        processed = []
         i = 0
         while i < len(words):
-            # Special handling for uppercase sequences
-            if i+1 < len(words) and words[i].isupper() and len(words[i]) > 1:
-                # Split uppercase sequences longer than 1 character
-                if len(words[i]) > 1 and i+1 < len(words) and words[i+1][0].isupper():
-                    # Handling cases like OpenAIGPT4Model
+            # Special handling for sequences of uppercase letters
+            if words[i].isupper() and len(words[i]) > 1:
+                # Strategy for handling uppercase sequences like ABC or AIGPT
+                if i+1 < len(words) and words[i+1][0].isupper():
+                    # If next word starts with uppercase, split strategically
                     if len(words[i]) > 2:
-                        processed_words.append(words[i][:2])
-                        processed_words.append(words[i][2:])
+                        processed.append(words[i][:2])
+                        processed.append(words[i][2:])
                     else:
-                        processed_words.append(words[i])
+                        processed.append(words[i])
                 else:
-                    # Split uppercase into individual characters
-                    processed_words.extend(list(words[i]))
+                    # For pure uppercase sequences: split into characters
+                    processed.extend(list(words[i]))
             else:
-                processed_words.append(words[i])
+                processed.append(words[i])
             i += 1
-        return processed_words
+        return processed
 
-    initial_split = split_complicated_cases(text)
+    initial_split = split_word(text)
     return post_process(initial_split)
