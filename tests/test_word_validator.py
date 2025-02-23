@@ -53,6 +53,12 @@ def test_word_validation_allowed_chars():
     assert is_word_valid('abcdefg', rules_strict) == True
     
     # Test when character is NOT in allowed_chars
+    print("Debugging: Checking word 'abcd'")
+    result = is_word_valid('abcd', rules_strict)
+    print(f"Result: {result}")
+    print("Allowed chars: 'abcdefg'")
+    print("Word chars: 'abcd'")
+    
     assert is_word_valid('abcd', rules_strict) == False  # 'd' is not in allowed_chars
     assert is_word_valid('xyz', rules_strict) == False
     assert is_word_valid('hello', rules_strict) == False
