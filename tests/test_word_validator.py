@@ -49,6 +49,7 @@ def test_word_validation_allowed_chars():
     }
     
     assert is_word_valid('abc', rules) == True
+    assert is_word_valid('abcdefg', rules) == True
     assert is_word_valid('abcd', rules) == False
     
 def test_word_validation_prohibited_chars():
