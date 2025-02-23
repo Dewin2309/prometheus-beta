@@ -123,4 +123,9 @@ def _parse_size_string(size_str: str) -> int:
     except ValueError:
         pass
     
-    raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB' or '1024'")
+    # Special case: if first part matches a known multiplier with no number
+    for unit in multipliers.keys():
+        if size_str == unit:
+            return multipliers[unit]
+    
+    raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB', '1KB', or '1024'")
