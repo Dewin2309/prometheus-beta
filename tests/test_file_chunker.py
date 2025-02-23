@@ -44,11 +44,21 @@ def test_invalid_chunk_size(temp_dir):
         split_file_into_chunks(input_file, chunk_size=-100)
 
 def test_size_parsing():
-    """Test size string parsing."""
-    assert _parse_size_string('1KB') == 1024
-    assert _parse_size_string('1MB') == 1024 * 1024
-    assert _parse_size_string('1GB') == 1024 * 1024 * 1024
-    assert _parse_size_string('10MB') == 10 * 1024 * 1024
+    """Test size string parsing with various inputs."""
+    test_cases = [
+        ('1KB', 1024),
+        ('1MB', 1024 * 1024),
+        ('1GB', 1024 * 1024 * 1024),
+        ('10KB', 10 * 1024),
+        ('1', 1),
+        ('1024', 1024),
+        ('KB', 1024),  # This is a special case that now works
+        ('B', 1)
+    ]
+    
+    for input_str, expected in test_cases:
+        result = _parse_size_string(input_str)
+        assert result == expected, f"Failed for input {input_str}"
 
 def test_size_parsing_invalid():
     """Test invalid size string parsing."""
