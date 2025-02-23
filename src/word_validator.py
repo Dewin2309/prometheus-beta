@@ -79,12 +79,11 @@ def is_word_valid(word, rules):
     # Check allowed characters
     allowed_chars = rules.get('allowed_chars')
     if allowed_chars is not None:
-        # Exact set match for characters
-        word_chars = set(word)
+        # Require ALL characters to be EXACTLY from allowed_chars
         allowed_chars_set = set(allowed_chars)
-        
-        # Ensure EVERY character in the word is from allowed_chars
-        return word_chars.issubset(allowed_chars_set)
+        for char in word:
+            if char not in allowed_chars_set:
+                return False
     
     # Check prohibited characters
     prohibited_chars = rules.get('prohibited_chars', [])
