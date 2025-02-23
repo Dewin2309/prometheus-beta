@@ -103,10 +103,12 @@ def _parse_size_string(size_str: str) -> int:
         'GB': 1024 * 1024 * 1024
     }
     
+    # Special case for exact unit match
+    if size_str in multipliers:
+        return multipliers[size_str]
+    
     # Try to parse size
     for unit, multiplier in multipliers.items():
-        if size_str == unit:
-            return multiplier
         if size_str.endswith(unit):
             try:
                 # First, remove the unit
