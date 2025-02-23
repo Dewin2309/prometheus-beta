@@ -79,6 +79,7 @@ def is_word_valid(word, rules):
     # Check allowed characters
     allowed_chars = rules.get('allowed_chars')
     if allowed_chars is not None:
+        # Check EVERY character must be from allowed_chars
         if not all(char in allowed_chars for char in word):
             return False
     
