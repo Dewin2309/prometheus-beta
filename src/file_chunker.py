@@ -93,7 +93,7 @@ def _parse_size_string(size_str: str) -> int:
     Raises:
         ValueError: If size string is invalid
     """
-    size_str = size_str.upper().strip()
+    size_str = str(size_str).upper().strip()
     
     # Map of unit multipliers
     multipliers = {
@@ -105,6 +105,8 @@ def _parse_size_string(size_str: str) -> int:
     
     # Try to parse size
     for unit, multiplier in multipliers.items():
+        if size_str == unit:
+            return multiplier
         if size_str.endswith(unit):
             try:
                 # First, remove the unit
@@ -122,10 +124,5 @@ def _parse_size_string(size_str: str) -> int:
         return int(size_str)
     except ValueError:
         pass
-    
-    # Special case: if first part matches a known multiplier with no number
-    for unit in multipliers.keys():
-        if size_str == unit:
-            return multipliers[unit]
     
     raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB', '1KB', or '1024'")
