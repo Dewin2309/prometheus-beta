@@ -79,9 +79,9 @@ def is_word_valid(word, rules):
     # Check allowed characters
     allowed_chars = rules.get('allowed_chars')
     if allowed_chars is not None:
-        # STRICT check: only characters within `allowed_chars` are allowed
-        # This ensures EVERY character must be in the allowed_chars set
-        if not all(char in allowed_chars for char in word):
+        # True only if EVERY character is in the allowed_chars
+        allowed_chars_set = set(allowed_chars)
+        if not all(char in allowed_chars_set for char in word):
             return False
     
     # Check prohibited characters
