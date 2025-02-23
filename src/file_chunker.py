@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Union, Optional
 
 def split_file_into_chunks(
@@ -93,6 +94,7 @@ def _parse_size_string(size_str: str) -> int:
     Raises:
         ValueError: If size string is invalid
     """
+    # Convert to string to handle numeric inputs 
     size_str = str(size_str).upper().strip()
     
     # Map of unit multipliers
@@ -103,28 +105,21 @@ def _parse_size_string(size_str: str) -> int:
         'GB': 1024 * 1024 * 1024
     }
     
-    # Special case for exact unit match
-    if size_str in multipliers:
-        return multipliers[size_str]
+    # Try regex parsing
+    match = re.match(r'^(\d*)([BKMG]B)?$', size_str)
+    if not match:
+        raise ValueError(f"Invalid size format: {size_str}")
     
-    # Try to parse size
-    for unit, multiplier in multipliers.items():
-        if size_str.endswith(unit):
-            try:
-                # First, remove the unit
-                value_str = size_str[:-len(unit)].strip()
-                
-                # Use 1 if no value specified (e.g., 'KB' -> 1)
-                value = float(value_str) if value_str else 1.0
-                
-                return int(value * multiplier)
-            except ValueError:
-                break
+    # Extract value and unit
+    value_str, unit = match.groups()
     
-    # Direct parsing if no unit is provided
-    try:
-        return int(size_str)
-    except ValueError:
-        pass
+    # If no unit given, treat as raw bytes
+    if not unit:
+        # If no value, return minimum
+        if not value_str:
+            return 1
+        return int(value_str)
     
-    raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB', '1KB', or '1024'")
+    # Compute size based on unit
+    value = float(value_str) if value_str else 1.0
+    return int(value * multipliers[unit])
