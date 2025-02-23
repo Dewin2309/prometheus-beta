@@ -107,9 +107,11 @@ def _parse_size_string(size_str: str) -> int:
     for unit, multiplier in multipliers.items():
         if size_str.endswith(unit):
             try:
-                value = float(size_str[:-len(unit)])
+                # Handle both decimal and integer inputs
+                value_str = size_str[:-len(unit)]
+                value = float(value_str) if value_str else 1.0
                 return int(value * multiplier)
             except ValueError:
                 break
     
-    raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB'")
+    raise ValueError(f"Invalid size format: {size_str}. Use format like '10MB' or '1KB'")
