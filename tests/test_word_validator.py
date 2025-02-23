@@ -44,13 +44,16 @@ def test_word_validation_basic():
 
 def test_word_validation_allowed_chars():
     """Test validation with allowed characters."""
-    rules = {
+    rules_strict = {
         'allowed_chars': 'abcdefg'
     }
     
-    assert is_word_valid('abc', rules) == True
-    assert is_word_valid('abcdefg', rules) == True
-    assert is_word_valid('abcd', rules) == False
+    assert is_word_valid('abc', rules_strict) == True
+    assert is_word_valid('abcdefg', rules_strict) == True
+    
+    # Test when NOT all characters are allowed
+    assert is_word_valid('abcd', rules_strict) == False  # 'd' is not in allowed_chars
+    assert is_word_valid('hello', rules_strict) == False
     
 def test_word_validation_prohibited_chars():
     """Test validation with prohibited characters."""
