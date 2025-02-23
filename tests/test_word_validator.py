@@ -48,12 +48,14 @@ def test_word_validation_allowed_chars():
         'allowed_chars': 'abcdefg'
     }
     
+    # Strictly from allowed_chars
     assert is_word_valid('abc', rules_strict) == True
     assert is_word_valid('abcdefg', rules_strict) == True
     
-    # Test when NOT all characters are allowed
+    # Characters outside allowed_chars
     assert is_word_valid('abcd', rules_strict) == False  # 'd' is not in allowed_chars
     assert is_word_valid('hello', rules_strict) == False
+    assert is_word_valid('xyz', rules_strict) == False
     
 def test_word_validation_prohibited_chars():
     """Test validation with prohibited characters."""
