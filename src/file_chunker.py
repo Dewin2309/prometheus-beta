@@ -105,6 +105,10 @@ def _parse_size_string(size_str: str) -> int:
         'GB': 1024 * 1024 * 1024
     }
     
+    # Direct unit match
+    if size_str in multipliers:
+        return multipliers[size_str]
+    
     # Try regex parsing
     match = re.match(r'^(\d*)([BKMG]B)?$', size_str)
     if not match:
