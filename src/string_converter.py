@@ -35,8 +35,26 @@ def to_camel_case(text: str) -> str:
     # Replace hyphens and underscores with spaces
     normalized = text.replace('-', ' ').replace('_', ' ')
     
-    # Split the string into words
-    words = normalized.split()
+    # Split the string maintaining numbers as part of words
+    words = []
+    current_word = ""
+    for char in normalized:
+        if char.isalpha():
+            current_word += char
+        elif char.isdigit():
+            # If current word is not empty, append it and start a new word with number
+            if current_word:
+                words.append(current_word)
+                current_word = ""
+            current_word += char
+        else:  # Whitespace or other separators
+            if current_word:
+                words.append(current_word)
+                current_word = ""
+    
+    # Append the last word if it exists
+    if current_word:
+        words.append(current_word)
     
     # If no words, return empty string
     if not words:
