@@ -48,4 +48,4 @@ def test_mixed_separators():
 
 def test_with_numbers():
     """Test conversion with numbers in the string."""
-    assert to_camel_case("hello2_world3 test4") == "hello2WorldTest4"
+    assert to_camel_case("hello2_world3 test4") == "hello2World3Test4"
