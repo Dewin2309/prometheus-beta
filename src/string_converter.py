@@ -19,8 +19,16 @@ def convert_to_alternating_case(input_string):
     if not input_string:
         return ""
     
-    # Convert to alternating lower case
-    return ''.join(
-        char.lower() if idx % 2 == 0 else char.upper() 
-        for idx, char in enumerate(input_string)
-    )
+    # Convert to alternating lower case with proper indexing
+    result = []
+    alpha_index = 0
+    for char in input_string:
+        if char.isalpha():
+            # Use alpha_index for alphabetic characters to track alternation
+            result.append(char.lower() if alpha_index % 2 == 0 else char.upper())
+            alpha_index += 1
+        else:
+            # Non-alphabetic characters are added as-is without changing the alpha_index
+            result.append(char)
+    
+    return ''.join(result)
