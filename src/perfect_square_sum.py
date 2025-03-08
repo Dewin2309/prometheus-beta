@@ -26,26 +26,16 @@ def sum_perfect_squares_from_set(number_set):
     # Find and sum unique perfect squares
     perfect_squares = set()
     
-    # Check all possible combinations and squares
+    # Check all possible combinations
     for num in number_set:
-        # Skip negative numbers
-        if num < 0:
+        # Skip non-positive numbers
+        if num <= 0:
             continue
         
         # Check if the number itself is a perfect square
         root = int(math.sqrt(num))
         if root * root == num:
             perfect_squares.add(num)
-        
-        # Check squares formed by multiplying set elements
-        for other in number_set:
-            if other < 0:
-                continue
-            
-            product = num * other
-            root = int(math.sqrt(product))
-            if root * root == product:
-                perfect_squares.add(product)
     
     # Return the sum of unique perfect squares
     return sum(perfect_squares)
