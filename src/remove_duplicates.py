@@ -19,13 +19,14 @@ def remove_duplicates_over_two(input_string: str) -> str:
     if not input_string:
         return ""
     
-    # Count the occurrences of each character
+    # Track the occurrences of each character
+    result = []
     char_counts = {}
+    
     for char in input_string:
-        char_counts[char] = char_counts.get(char, 0) + 1
+        # If the character has appeared less than 2 times, add it
+        if char_counts.get(char, 0) < 2:
+            result.append(char)
+            char_counts[char] = char_counts.get(char, 0) + 1
     
-    # Build the result string, keeping characters that appear 1 or 2 times
-    result = ''.join(char for char in input_string 
-                     if char_counts[char] <= 2)
-    
-    return result
+    return ''.join(result)
