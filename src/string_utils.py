@@ -11,6 +11,7 @@ def switch_cases(str1, str2):
     
     Raises:
         TypeError: If either input is not a string
+        ValueError: If input strings are of unequal length
     """
     # Validate input types
     if not isinstance(str1, str) or not isinstance(str2, str):
@@ -20,10 +21,10 @@ def switch_cases(str1, str2):
     if len(str1) != len(str2):
         raise ValueError("Input strings must be of equal length")
     
-    # Create the new string by swapping cases
-    switched = ''.join(
-        c.lower() if c.isupper() else c.upper() 
-        for c in str1 + str2
-    )
+    # Create the new string by swapping cases alternately
+    switched = ''
+    for c1, c2 in zip(str1, str2):
+        switched += c1.lower() if c1.isupper() else c1.upper()
+        switched += c2.lower() if c2.isupper() else c2.upper()
     
     return switched
