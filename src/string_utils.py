@@ -21,16 +21,16 @@ def switch_cases(str1, str2):
     if len(str1) != len(str2):
         raise ValueError("Input strings must be of equal length")
     
-    # Create the new string with alternating case strategies
+    # Create the new string with specific case transformation
     switched = ''
     for i in range(len(str1)):
-        # First alternate: process str1 characters
+        # Process first string's characters
         if str1[i].isupper():
             switched += str1[i].lower()
         else:
             switched += str1[i].upper()
         
-        # Second alternate: process str2 characters
+        # Process second string's characters
         if str2[i].isupper():
             switched += str2[i].lower()
         else:
