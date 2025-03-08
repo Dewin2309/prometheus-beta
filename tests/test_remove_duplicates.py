@@ -15,7 +15,7 @@ def test_remove_duplicates_over_two_empty_string():
 
 def test_remove_duplicates_over_two_all_removed():
     """Test case where all characters would be removed."""
-    assert remove_duplicates_over_two("aaaa") == ""
+    assert remove_duplicates_over_two("aaaa") == "aa"
 
 def test_remove_duplicates_over_two_mixed_cases():
     """Test mixed case with some characters repeated."""
@@ -23,7 +23,7 @@ def test_remove_duplicates_over_two_mixed_cases():
 
 def test_remove_duplicates_over_two_special_characters():
     """Test with special characters and mixed repetitions."""
-    assert remove_duplicates_over_two("!!@@##$$$") == "!!@@##$"
+    assert remove_duplicates_over_two("!!@@##$$$") == "!!@@##$$"
 
 def test_remove_duplicates_over_two_unicode():
     """Test with Unicode characters."""
