@@ -25,6 +25,7 @@ def remove_duplicates_over_two(input_string: str) -> str:
     
     for char in input_string:
         # If the character has appeared less than 2 times, add it
+        # For third and subsequent occurrences, skip
         if char_counts.get(char, 0) < 2:
             result.append(char)
             char_counts[char] = char_counts.get(char, 0) + 1
