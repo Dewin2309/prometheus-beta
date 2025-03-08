@@ -21,12 +21,12 @@ def process_multidim_array(arr):
             flattened.extend(deep_flatten(subitem))
         return flattened
 
-    # Remove empty sub-arrays and process from the end
-    non_empty_arrays = list(reversed([subarray for subarray in arr if subarray]))
+    # Remove empty sub-arrays and preserve the original order
+    non_empty_arrays = [subarray for subarray in arr if subarray]
     
-    # Flatten each reversed subarray
+    # Collect flattened and reversed subarrays
     flattened = []
-    for subarray in non_empty_arrays:
+    for subarray in reversed(non_empty_arrays):
         # Reverse the subarray and deeply flatten
         reversed_subarray = list(reversed(subarray))
         flattened.extend(deep_flatten(reversed_subarray))
