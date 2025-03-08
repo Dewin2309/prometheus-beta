@@ -27,6 +27,6 @@ def test_non_ascii_characters():
 
 def test_whitespace_and_special_characters():
     """Test with strings containing whitespace and special characters."""
-    assert longest_unique_substring("  a b c  ") == 4
+    assert longest_unique_substring("  a b c  ") == 3
     assert longest_unique_substring("!@#$%^&*()") == 10
     assert longest_unique_substring("a!b@c#") == 6
