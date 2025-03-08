@@ -20,7 +20,7 @@ def test_remove_duplicates_all_duplicates():
 
 def test_remove_duplicates_mixed_duplicates():
     """Test string with mixed duplicate patterns."""
-    assert remove_duplicate_chars("abracadabra") == "abrc"
+    assert remove_duplicate_chars("abracadabra") == "abrcd"
 
 def test_remove_duplicates_invalid_input():
     """Test that non-lowercase input raises a ValueError."""
