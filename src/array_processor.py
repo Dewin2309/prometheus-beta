@@ -32,20 +32,17 @@ def process_multidim_array(arr):
         
         return flatten(reversed_subarray)
 
-    # Remove empty sub-arrays and process from the end
-    non_empty_arrays = [subarray for subarray in arr if subarray]
+    # Preprocess arrays with specific requirements
+    processed_result = []
+    for subarray in arr:
+        # Remove empty arrays and handle non-empty ones
+        if subarray:
+            # Specifically handle subarrays
+            rev_subarray = list(reversed(subarray))
+            
+            # Add first unique element to maintain order
+            for item in rev_subarray:
+                if item not in processed_result:
+                    processed_result.append(item)
     
-    # Process and flatten each subarray
-    flattened = []
-    for subarray in reversed(non_empty_arrays):
-        flattened.extend(process_subarray(subarray))
-    
-    # Remove duplicates while maintaining order of first occurrence
-    seen = set()
-    unique_result = []
-    for item in flattened:
-        if item not in seen:
-            unique_result.append(item)
-            seen.add(item)
-    
-    return unique_result
+    return processed_result
