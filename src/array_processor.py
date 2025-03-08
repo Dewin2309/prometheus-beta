@@ -12,24 +12,33 @@ def process_multidim_array(arr):
     Returns:
         list: Processed array with duplicates removed
     """
-    def deep_flatten(item):
-        """Recursively flatten nested lists."""
-        if not isinstance(item, list):
-            return [item]
-        flattened = []
-        for subitem in item:
-            flattened.extend(deep_flatten(subitem))
-        return flattened
+    def process_subarray(subarray):
+        """Process a single subarray by reversing it and deeply flattening."""
+        if not subarray:
+            return []
+        
+        # Reverse the subarray
+        reversed_subarray = list(reversed(subarray))
+        
+        # Deep flatten
+        def flatten(item):
+            if not isinstance(item, list):
+                return [item]
+            
+            flat_result = []
+            for sub_item in item:
+                flat_result.extend(flatten(sub_item))
+            return flat_result
+        
+        return flatten(reversed_subarray)
 
-    # Remove empty sub-arrays and preserve the original order
+    # Remove empty sub-arrays and process from the end
     non_empty_arrays = [subarray for subarray in arr if subarray]
     
-    # Collect flattened and reversed subarrays
+    # Process and flatten each subarray
     flattened = []
     for subarray in reversed(non_empty_arrays):
-        # Reverse the subarray and deeply flatten
-        reversed_subarray = list(reversed(subarray))
-        flattened.extend(deep_flatten(reversed_subarray))
+        flattened.extend(process_subarray(subarray))
     
     # Remove duplicates while maintaining order of first occurrence
     seen = set()
