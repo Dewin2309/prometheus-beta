@@ -21,20 +21,20 @@ def process_multidim_array(arr):
             flattened.extend(deep_flatten(subitem))
         return flattened
 
-    # Remove empty sub-arrays
-    non_empty_arrays = [subarray for subarray in arr if subarray]
+    # Remove empty sub-arrays and process from the end
+    non_empty_arrays = list(reversed([subarray for subarray in arr if subarray]))
     
-    # Processing for each subarray
-    processed_arrays = []
+    # Flatten each reversed subarray
+    flattened = []
     for subarray in non_empty_arrays:
         # Reverse the subarray and deeply flatten
         reversed_subarray = list(reversed(subarray))
-        processed_arrays.extend(deep_flatten(reversed_subarray))
+        flattened.extend(deep_flatten(reversed_subarray))
     
     # Remove duplicates while maintaining order of first occurrence
     seen = set()
     unique_result = []
-    for item in processed_arrays:
+    for item in flattened:
         if item not in seen:
             unique_result.append(item)
             seen.add(item)
