@@ -20,6 +20,10 @@ def remove_duplicate_chars(input_string: str) -> str:
         >>> remove_duplicate_chars("")
         ''
     """
+    # Handle empty string case explicitly
+    if not input_string:
+        return ""
+    
     # Validate input is lowercase
     if not input_string.islower():
         raise ValueError("Input must contain only lowercase characters")
