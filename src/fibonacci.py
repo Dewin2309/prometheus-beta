@@ -1,9 +1,11 @@
 def extended_fibonacci(n):
     """
-    Generate the nth number in the extended Fibonacci sequence, supporting negative indices and float inputs.
+    Generate the nth number in the extended Fibonacci sequence, supporting 
+    negative indices and float inputs.
     
-    The extended Fibonacci sequence allows negative indices and maintains the core Fibonacci recurrence 
-    relation F(n) = F(n-1) + F(n-2) for all integers.
+    The extended Fibonacci sequence is defined with the recurrence relation 
+    F(n) = F(n-1) + F(n-2) and some specific base cases for integer and 
+    float inputs.
     
     Args:
         n (int or float): The index of the Fibonacci number to generate.
@@ -18,39 +20,47 @@ def extended_fibonacci(n):
     if not isinstance(n, (int, float)):
         raise TypeError("Input must be a number")
     
-    # Handle integer cases first (including negative integers)
+    # For integer inputs
     if isinstance(n, int):
-        # Use memoization to efficiently calculate Fibonacci numbers
-        memo = {}
-        
-        def fib(k):
-            # Handling base cases
-            if k == 0:
-                return 0
-            if k == 1 or k == -1:
-                return 1
-            if k == -2:
-                return -1
+        def fibonacci_iterative(k):
+            """Compute Fibonacci numbers efficiently for integer inputs."""
+            # Positive and negative base cases
+            base_cases = {
+                0: 0,
+                1: 1,
+                -1: 1,
+                -2: -1
+            }
             
-            # Check memoized results to avoid recomputation
-            if k in memo:
-                return memo[k]
+            # Direct return for known base cases
+            if k in base_cases:
+                return base_cases[k]
             
-            # Recursive calculation using the extended recurrence relation
-            # Works for both positive and negative indices
-            memo[k] = fib(k-1) + fib(k-2)
-            return memo[k]
+            # Determine direction of computation
+            steps = abs(k)
+            sign = 1 if k >= 0 else (-1) ** (abs(k) + 1)
+            
+            # Initialize for computation
+            if k > 0:
+                a, b = 0, 1
+                for _ in range(2, steps + 1):
+                    a, b = b, a + b
+                return b
+            else:
+                a, b = 1, -1
+                for _ in range(2, steps + 1):
+                    a, b = b, a - b
+                return a * sign
         
-        return float(fib(n))
+        return float(fibonacci_iterative(n))
     
-    # Handle float cases using interpolation
-    # For non-integer inputs, we'll use linear interpolation between surrounding integers
+    # For float inputs
     else:
-        # Split the float into integer and fractional parts
+        # Integer and fractional parts
         int_part = int(n)
         frac_part = n - int_part
         
-        # Calculate surrounding integer Fibonacci numbers
+        # Compute surrounding integer Fibonacci numbers
         lower_fib = extended_fibonacci(int_part)
         upper_fib = extended_fibonacci(int_part + 1)
         
