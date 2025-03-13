@@ -26,5 +26,5 @@ def calculate_min_max_average(numbers):
     smallest_avg = sum(smallest_three) / 3
     largest_avg = sum(largest_three) / 3
 
-    # Return the sum of these two averages
-    return smallest_avg + largest_avg
+    # Return the average of these two averages
+    return (smallest_avg + largest_avg) / 2
