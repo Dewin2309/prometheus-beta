@@ -4,11 +4,11 @@ from src.unique_chars import extract_unique_chars
 def test_extract_unique_chars_basic():
     """Test basic functionality of extracting unique characters."""
     assert extract_unique_chars("123456789") == "123456789"
-    assert extract_unique_chars("1112223334444") == "123"
+    assert extract_unique_chars("1112223334444") == "1234"
 
 def test_extract_unique_chars_mixed():
     """Test with mixed numeric characters."""
-    assert extract_unique_chars("1232145679") == "123245679"
+    assert extract_unique_chars("1232145679") == "12345679"
 
 def test_extract_unique_chars_edge_cases():
     """Test edge cases."""
