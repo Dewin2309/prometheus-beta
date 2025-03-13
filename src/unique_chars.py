@@ -19,23 +19,20 @@ def extract_unique_chars(input_string):
     if not input_string:
         return ""
     
-    # Use a flag array to track character presence
-    # Assume input is numeric, so we'll use a fixed-size flag array
-    seen = [False] * 10
+    # Use a custom method to track unique characters while preserving order
     result = []
+    seen = set()
     
-    # Iterate through the input string
     for char in input_string:
-        # Convert character to integer index
+        # Try to convert to numeric, skip non-numeric
         try:
-            index = int(char)
+            int(char)
         except ValueError:
-            # Skip non-numeric characters
             continue
         
-        # If character hasn't been seen before, add to result
-        if not seen[index]:
-            seen[index] = True
+        # Check if character is unique
+        if char not in seen:
+            seen.add(char)
             result.append(char)
     
     # Convert result to string
