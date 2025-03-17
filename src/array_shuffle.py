@@ -35,6 +35,9 @@ def shuffle_array(arr: List[T]) -> List[T]:
     if len(shuffled) <= 1:
         return shuffled
     
+    # Explicitly use system time for better randomness
+    random.seed()
+    
     # Fisher-Yates (Knuth) shuffle algorithm
     for i in range(len(shuffled) - 1, 0, -1):
         # Generate a random index between 0 and i (inclusive)
