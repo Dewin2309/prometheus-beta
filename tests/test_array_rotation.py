@@ -23,7 +23,7 @@ def test_single_element_array():
 
 def test_rotation_greater_than_length():
     """Test rotation amount greater than array length"""
-    assert rotate_array([1, 2, 3], 7) == [2, 3, 1]
+    assert rotate_array([1, 2, 3], 7) == [3, 1, 2]
 
 def test_zero_rotation():
     """Test zero rotation"""
@@ -31,7 +31,7 @@ def test_zero_rotation():
 
 def test_negative_rotation_raises_error():
     """Test that negative rotation raises a ValueError"""
-    with pytest.raises(TypeError):
+    with pytest.raises(ValueError):
         rotate_array([1, 2, 3], -1)
 
 def test_non_list_input_raises_error():
