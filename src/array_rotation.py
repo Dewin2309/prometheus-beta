@@ -19,12 +19,16 @@ def rotate_array(arr, n):
     if not isinstance(n, int):
         raise TypeError("Rotation amount must be an integer")
     
+    # Check for negative rotation
+    if n < 0:
+        raise ValueError("Rotation amount cannot be negative")
+    
     # Handle edge cases
     if not arr:  # Empty list
         return []
     
     # Normalize rotation amount
-    n = n % len(arr) if len(arr) > 0 else 0
+    n = n % len(arr)
     
     # Perform rotation
     return arr[-n:] + arr[:-n]
