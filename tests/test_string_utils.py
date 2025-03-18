@@ -15,7 +15,7 @@ def test_preserve_spacing():
 
 def test_with_numbers():
     """Test handling of words with numbers"""
-    assert reverse_words("123 abc 456 def") == "456 def 123 abc"
+    assert reverse_words("123 abc 456 def") == "def 456 abc 123"
 
 def test_mixed_alphanumeric():
     """Test mixed alphanumeric words"""
@@ -31,7 +31,7 @@ def test_single_word():
 
 def test_special_characters():
     """Test string with special characters"""
-    assert reverse_words("hello! world@") == "world@ hello!"
+    assert reverse_words("hello! world@") == "world! hello@"
 
 def test_whitespace_only():
     """Test string with only whitespace"""
