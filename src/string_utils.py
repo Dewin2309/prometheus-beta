@@ -1,7 +1,7 @@
 def reverse_words(sentence: str) -> str:
     """
     Reverse the order of words in a given string while handling multiple spaces 
-    and ignoring non-alphabetic characters.
+    and preserving original formatting.
     
     Args:
         sentence (str): The input string to be processed
@@ -21,30 +21,43 @@ def reverse_words(sentence: str) -> str:
     if not sentence:
         return ""
     
-    # Split the string while preserving whitespace
-    words = []
-    current_word = []
-    current_non_word = []
+    # Split the string into tokens, preserving all whitespace and non-alphanumeric characters
+    def tokenize(s):
+        tokens = []
+        current_token = []
+        for char in s:
+            if char.isalnum():
+                current_token.append(char)
+            else:
+                if current_token:
+                    tokens.append(''.join(current_token))
+                    current_token = []
+                tokens.append(char)
+        if current_token:
+            tokens.append(''.join(current_token))
+        return tokens
     
-    for char in sentence:
-        if char.isalnum():
-            # If we have accumulated non-word characters, add them as a separate element
-            if current_non_word:
-                words.append(''.join(current_non_word))
-                current_non_word = []
-            current_word.append(char)
+    # Tokenize the input
+    tokens = tokenize(sentence)
+    
+    # Separate alphanumeric words and non-word tokens
+    words = [t for t in tokens if any(c.isalnum() for c in t)]
+    non_word_tokens = [t for t in tokens if not any(c.isalnum() for c in t)]
+    
+    # Reverse the words
+    reversed_words = list(reversed(words))
+    
+    # Reconstruct the string
+    result = []
+    word_index = 0
+    token_index = 0
+    
+    while token_index < len(tokens):
+        if tokens[token_index].isalnum():
+            result.append(reversed_words[word_index])
+            word_index += 1
         else:
-            # If we have a complete word, add it
-            if current_word:
-                words.append(''.join(current_word))
-                current_word = []
-            current_non_word.append(char)
+            result.append(tokens[token_index])
+        token_index += 1
     
-    # Add any remaining word or non-word characters
-    if current_word:
-        words.append(''.join(current_word))
-    if current_non_word:
-        words.append(''.join(current_non_word))
-    
-    # Reverse the words while maintaining their original non-word separators
-    return ''.join(reversed(words))
+    return ''.join(result)
