@@ -16,7 +16,7 @@ def test_single_element_list():
 
 def test_negative_numbers():
     """Test with negative numbers."""
-    assert calculate_sum([-1, -2, -3]) == -14
+    assert calculate_sum([-1, -2, -3]) == -8
     # Explanation: (-1*0) + (-2*1) + (-3*2) = 0 - 2 - 6 = -8
 
 def test_invalid_input_non_list():
