@@ -21,7 +21,7 @@ def reverse_words(sentence: str) -> str:
     if not sentence:
         return ""
     
-    # Split the string into tokens, preserving all whitespace and non-alphanumeric characters
+    # Split the string into tokens, preserving all whitespace and including numeric words
     def tokenize(s):
         tokens = []
         current_token = []
@@ -44,20 +44,21 @@ def reverse_words(sentence: str) -> str:
     words = [t for t in tokens if any(c.isalnum() for c in t)]
     non_word_tokens = [t for t in tokens if not any(c.isalnum() for c in t)]
     
-    # Reverse the words
-    reversed_words = list(reversed(words))
-    
     # Reconstruct the string
     result = []
-    word_index = 0
     token_index = 0
     
     while token_index < len(tokens):
-        if tokens[token_index].isalnum():
-            result.append(reversed_words[word_index])
-            word_index += 1
+        current_token = tokens[token_index]
+        
+        # Check if current token is an alphanumeric word
+        if any(c.isalnum() for c in current_token):
+            # Replace with the corresponding word from the end of the list
+            result.append(words[len(words) - 1 - words.index(current_token)])
         else:
-            result.append(tokens[token_index])
+            # Preserve non-word tokens (spaces, punctuation)
+            result.append(current_token)
+        
         token_index += 1
     
     return ''.join(result)
