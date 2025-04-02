@@ -17,7 +17,7 @@ def test_sum_unique_elements_all_unique():
 
 def test_sum_unique_elements_negative_numbers():
     """Test with negative numbers"""
-    assert sum_unique_elements([-1, -1, 2, 3, 2]) == 2  # 3 is unique
+    assert sum_unique_elements([-1, -1, 2, 3, 2]) == 3  # 3 is unique
 
 def test_sum_unique_elements_invalid_input():
     """Test error handling for invalid inputs"""
