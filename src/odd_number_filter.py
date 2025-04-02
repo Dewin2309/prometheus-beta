@@ -20,5 +20,4 @@ def filter_odd_numbers(numbers):
         raise TypeError("All elements must be numeric")
     
     # Filter and return only odd integers
-    return [num for num in numbers if isinstance(num, int) and num % 2 != 0 or 
-            isinstance(num, float) and num.is_integer() and int(num) % 2 != 0]
+    return [num for num in numbers if isinstance(num, int) and num % 2 != 0]
