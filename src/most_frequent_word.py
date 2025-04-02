@@ -11,7 +11,8 @@ def most_frequent_word(text: str) -> str:
              returns one of them.
 
     Raises:
-        ValueError: If the input text is empty or contains non-lowercase letters.
+        ValueError: If the input text is empty, contains non-lowercase letters,
+                    or contains no words.
     """
     # Validate input
     if not text:
