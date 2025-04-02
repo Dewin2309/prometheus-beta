@@ -18,16 +18,16 @@ def most_frequent_word(text: str) -> str:
     if not text:
         raise ValueError("Input text cannot be empty")
     
+    # Check for whitespace-only input
+    if not text.strip():
+        raise ValueError("Input text must contain at least one word")
+    
     # Check for non-lowercase letters
     if not text.islower():
         raise ValueError("Input text must contain only lowercase letters")
     
     # Split the text into words
     words = text.split()
-    
-    # If no words, raise an error
-    if not words:
-        raise ValueError("Input text must contain at least one word")
     
     # Count word frequencies
     word_counts = {}
