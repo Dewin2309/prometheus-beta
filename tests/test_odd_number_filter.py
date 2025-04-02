@@ -34,3 +34,4 @@ def test_filter_odd_numbers_type_error_non_numeric():
 def test_filter_odd_numbers_floats():
     """Test handling of float values (only integers should be considered)."""
     assert filter_odd_numbers([1.5, 2, 3.0, 4, 5]) == []
+    assert filter_odd_numbers([5]) == [5]  # Integer 5 should be included
