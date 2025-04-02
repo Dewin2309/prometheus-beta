@@ -19,5 +19,5 @@ def filter_odd_numbers(numbers):
     if not all(isinstance(num, (int, float)) for num in numbers):
         raise TypeError("All elements must be numeric")
     
-    # Filter and return only odd numbers
-    return [num for num in numbers if isinstance(num, int) and num % 2 != 0]
+    # Filter and return only odd integers
+    return [num for num in numbers if num == int(num) and int(num) % 2 != 0]
